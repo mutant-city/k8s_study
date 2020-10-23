@@ -5,6 +5,10 @@ metadata:
   namespace: some-namespace<add your custom defined namespace here>
   labels: <k/v pairs of custom labels to add to the object>
     app: myapp
+    test-label-key:test-label-value
+  annotations: <k/v pairs of custom annoations to add to the object>
+    owner: test-owner-value
+    other-annotation-key:other-annotation-value
 spec:
   serviceAccountName: my-serviceaccount <a service account>
   securityContext:

@@ -49,6 +49,12 @@ kubectl delete <item> <item name>
 * `kubectl describe node $node_name`
 
 
+* service
+    * `kubectl get endpoints <service name`
+        * this is the connection info from service to pods
+        * can use it to make sure connectivity
+
+
 * can run images directly from cli
     * ` kubectl run web --image=nginx`
 
@@ -80,7 +86,7 @@ kubectl delete <item> <item name>
 
 
 ###  K8's objects
-* Pod, Deployment, Service,  ConfigMap, Job/CronJob, 
+* Pod, Deployment, Service,  ConfigMap, Job/CronJob, NetworkPolicies, PersistentVolume, PersistentVolumeClaim
 
 * Pods:
     * Runs a single set of containers
@@ -153,12 +159,60 @@ kubectl delete <item> <item name>
 * Services
     *  act as the load balancers for Kubernetes traffic, internal and external.
     *  uses selectors
-    * `kubectl expose deployment web --port=80`
-    * The service will have its own internal IP address (denoted by the name ClusterIP)
-    * connections to this IP address on port 80 will be load-balanced across all the pods of this deployment, matching the service’s selector..
-    * When we edit the deployment and trigger a rolling update, a new replica set is created. This replica set will create pods, whose labels will include (among others) run=web. As such, these pods will receive connections automatically.
-    * This means that during a rollout, the deployment doesn’t reconfigure or inform the load balancer that pods are started and stopped. It happens automatically through the selector of the service associated to the load balancer.
+    *  create deployment via cli: `kubectl expose deployment web --port=80`
+    *  The service will have its own internal IP address (denoted by the name ClusterIP)
+    *  connections to this IP address on port 80 will be load-balanced across all the pods of this deployment, matching the service’s selector..
+    *  When we edit the deployment and trigger a rolling update, a new replica set is created. This replica set will create pods, whose labels will include (among others) run=web. As such, these pods will receive connections automatically.
+    *  This means that during a rollout, the deployment doesn’t reconfigure or inform the load balancer that pods are started and stopped. It happens automatically through the selector of the service associated to the load balancer.
+    *  `kubectl get endpoints <service name`
+         * this is the connection info from service to pods
+         * can use it to make sure connectivity
+        
+    * service types
+        * clusterIP : exposes the service INSIDE the cluster 
+        * NodePort: exposes the service OUTSIDE the cluster on a node port
+        * LoadBalancer: provision a load balancer EXTERNAL to the app(i.e. an AWS or AZURE load balancer)
+        * ExernalName: Maps the service to an external URL, such a database outside of the cluster, or an API
 
+* NetworkPolicies
+    * Like Security Groups from AWS but for K8's
+    * By default(with no network policy) all pods are allowed to communicate with any other pod and reach out to any available IP
+    * As soon as a NetworkPolicy applies to a pod(i.e. valid pod selectors)
+        * the default will be to blacklist everything
+        * the NetworkPolicy of allowed options will be a whitelist
+    * Note: numerous k8's cluters don't support NetworkPolicies by default(may need to setup canal or cilium)
+    * Spec:
+        * The pod selector applies this NetPol to pods and locks them down/blacklist everything from them
+        * the policyTypes/ingress/egress opens up per those specifications
+         ```
+        apiVersion: networking.k8s.io/v1
+        kind: NetworkPolicy
+        metadata:
+          name: my-network-policy
+        spec:
+          podSelector:
+            matchLabels:
+              app: secure-app
+          policyTypes:
+          - Ingress
+          - Egress
+          ingress:
+          - from:
+            - podSelector:
+                matchLabels:
+                  allow-access: "true"
+            ports:
+            - protocol: TCP
+              port: 80
+          egress:
+          - to:
+            - podSelector:
+                matchLabels:
+                  allow-access: "true"
+            ports:
+            - protocol: TCP
+              port: 80
+        ```
 * Jobs/CronJobs
     * used to reliable execute a workload until it completes
     * as opposed to pods which continue to run constantly
@@ -174,7 +228,10 @@ kubectl delete <item> <item name>
         * will allow you to see the scheduling info for the cronjob
         
 * PersistentVolume
-    * 
+    * TBD
+    
+* PersistentVolumeClaim
+    * TBD
 
 ### Troubleshooting/Debugging
 * `kubectl get X` 

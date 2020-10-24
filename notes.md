@@ -190,13 +190,13 @@ kubectl delete <item> <item name>
         metadata:
           name: my-network-policy
         spec:
-          podSelector:
+          podSelector:  # APPLIES THIS POLICY TO PODS
             matchLabels:
               app: secure-app
-          policyTypes:
+          policyTypes:   # WHITELIST
           - Ingress
           - Egress
-          ingress:
+          ingress:        # WHITELIST
           - from:
             - podSelector:
                 matchLabels:
@@ -204,7 +204,7 @@ kubectl delete <item> <item name>
             ports:
             - protocol: TCP
               port: 80
-          egress:
+          egress:        # WHITELIST
           - to:
             - podSelector:
                 matchLabels:
@@ -214,7 +214,7 @@ kubectl delete <item> <item name>
               port: 80
         ```
 * Jobs/CronJobs
-    * used to reliable execute a workload until it completes
+    * used to reliably execute a workload until it completes
     * as opposed to pods which continue to run constantly
     * will creeate one or more pods which will enter completed state after running the job
     * part of batch api, 

@@ -1,3 +1,6 @@
+## CLI
+* k8's has an elegant and predictable cli
+
 ### Cluster enumeration and CLI:
 *  
 ```
@@ -52,7 +55,6 @@ kubectl delete <item> <item name>
         * this is the connection info from service to pods
         * can use it to make sure connectivity
 
-
 * can run images directly from cli
     * ` kubectl run web --image=nginx`
 
@@ -63,7 +65,7 @@ kubectl delete <item> <item name>
     * `kubectl get pods -o wide`
     * `kubectl get pod <podname> -o wide`
 
-* Run a command in a Container in 
+* Run a command in a Container
     * `kubectl exec <pod name> -- curl <secure pod cluster ip address>`
 
 * To inspect a nodes resources:
@@ -97,6 +99,7 @@ kubectl delete <item> <item name>
         kubectl top pod <podname>
         kubectl top nodes
       ```
+      
 ### Running objects
 * commands:
     * create
@@ -138,7 +141,6 @@ of time or a specific event.
     * `kubectl get pod <pod> -n <namespace> -o yaml --export`
     * only gets the actual spec of the pod, ignores the status and other metadata
     
-
 ###  Logging
 * Everything a containerized application writes to stdout and stderr is handled and redirected somewhere by a container engine.  
 * ensure log rotation on the node so that space doesn't fill up 

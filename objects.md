@@ -1,5 +1,6 @@
 ## K8's objects
 * Pod, Deployment, Service,  ConfigMap, Job/CronJob, NetworkPolicies, PersistentVolume, PersistentVolumeClaim
+* and more :)
 
 ### Pods:
 * Runs a single set of containers
@@ -72,7 +73,8 @@
 ### Services
 *  act as the load balancers for Kubernetes traffic, internal and external.
 *  uses selectors
-*  create deployment via cli: `kubectl expose deployment web --port=80`
+*  can create deployment via cli: `kubectl expose deployment web --port=80`
+    * also done via .yaml spec file
 *  The service will have its own internal IP address (denoted by the name ClusterIP)
 *  connections to this IP address on port 80 will be load-balanced across all the pods of this deployment, matching the service’s selector..
 *  When we edit the deployment and trigger a rolling update, a new replica set is created. This replica set will create pods, whose labels will include (among others) run=web. As such, these pods will receive connections automatically.
@@ -83,7 +85,7 @@
     
 * service types
     * clusterIP : exposes the service INSIDE the cluster 
-    * NodePort: exposes the service OUTSIDE the cluster on a node port
+    * NodePort: exposes the service OUTSIDE the cluster on a NODE port
     * LoadBalancer: provision a load balancer EXTERNAL to the app(i.e. an AWS or AZURE load balancer)
     * ExernalName: Maps the service to an external URL, such a database outside of the cluster, or an API
 
@@ -97,8 +99,6 @@
 * ```
     kubectl get networkpolicies
     kubectl describe networkpolicy my-network-policy
-
-
       
       ```
     * Spec:
@@ -153,19 +153,17 @@
 ### PersistentVolumeClaim
 * TBD
 
+### Config Map
+* k/v store of configuration data that you need to pass into pods/containers
+* can pass in two ways
+    1. via env section of spec file
+    2. via a volume mount
+        * if passed in as volume mount, each TOP LEVEL key will be added as a FILE in your mount point
+        * so if your mount point is `/etc/config` and you mount a config map there will be one file per TOP LEVEL KEY
 
-
-* Config Map
-    * k/v store of configuration data that you need to pass into pods/containers
-    * can pass in two ways
-        1. via env section of spec file
-        2. via a volume mount
-            * if passed in as volume mount, each TOP LEVEL key will be added as a FILE in your mount point
-            * so if your mount point is `/etc/config` and you mount a config map there will be one file per TOP LEVEL KEY
- 
-* Secrets:
-    * can create a secret file
-    * can set it in spec file with apply
+### Secrets:
+* can create a secret file
+* can set it in spec file with apply
 
 
 

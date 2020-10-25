@@ -2,7 +2,6 @@
 * Kubernetes (“koo-burr-NET-eez”) is the no-doubt-mangled conventional pronunciation of a Greek word, κυβερνήτης, meaning “helmsman” or “pilot.” 
 * https://www.geekwire.com/2016/ever-come-kooky-kubernetes-name-heptio/
 
-
 ### namespaces
 * without a namespace, 
     * the object will be in the default namespace
@@ -30,7 +29,7 @@ Commands:
 ### Vocab
 * Node: The actual server hardware that a k8's daemon is running on
 * Pod: A collection of containers that serve a purpose that run on a Node
-
+* Container: the actual singlar unit of work/container that is running
 
 ### Networking
 * Each Pod is assigned a unique IP address for each address family. 
@@ -43,7 +42,7 @@ Commands:
 * `securityContext` defined as an element in the `spec` root element 
 
 ### Resource Requirements
-* k8's allows us to specifiy the resource requirments of a container in the pod spec
+* k8's allows us to specify the resource requirements of a container in the pod spec
 * memory/cpu 
 * defined in terms of:
     * resource requests 
@@ -70,7 +69,7 @@ Commands:
 ### Annotations
 * used to store custom metadata about objects
 * not intended to be identifying and not usable by selection
-* just attach somekind of custom data 
+* just attach some kind of custom data 
 
 ### Selectors
 * provide us a way to select a list of objects based on their lable
@@ -90,5 +89,50 @@ kubectl apply -f ~/metrics-server/deploy/1.8+/
 kubectl get --raw /apis/metrics.k8s.io/
 ```
 
-  
-      
+### Storage
+* containers internal storage ephemeral by default
+    * when that container is deleted that storage is gone
+
+* Kubernetes is designed to manage stateless containers
+    * pods/containers should be easily deletable and replacable
+    * since data inside container is gone when container deleted need external storage to container lifecycle
+
+* State persistence: maintaining data outside and potentially beyond the lifecycle of a container
+* PersistentVolume and PersistentVolume claims provide easy way to implement/consume storage resources in the context 
+    of complex production environment that has numerous storage solutions
+    * 
+* Volume
+    * Volumes exists outside the lifetime of the container and aren't ephemeral
+    * mounts volumes to specific container
+    * setup inside of the pod spec-> .spec.volumes
+    * assigned to container/s via -> .spec.containers.volumeMounts[]
+    * types of volume:
+        * emptyDir volume
+            * can add an emptyDir to numerous containers who all now share volume
+            * in below spec file the two containers share the my-volume storage at /tmp/storage
+        * ```
+            apiVersion: v1
+            kind: Pod
+            metadata:
+              name: volume-pod
+            spec:
+              containers:
+              - image: busybox
+                name: busybox
+                command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
+                volumeMounts:
+                - mountPath: /tmp/storage
+                  name: my-volume         
+              - image: busybox
+                name: busybox
+                command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
+                volumeMounts:
+                - mountPath: /tmp/storage
+                  name: my-volume
+            volumes:
+                - name: my-volume
+                  emptyDir: {}
+        ```
+          
+       
+* PersistentVolume

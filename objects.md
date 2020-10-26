@@ -1,6 +1,7 @@
 ## K8's objects
 * Pod, Deployment, Service,  ConfigMap, Job/CronJob, NetworkPolicies, PersistentVolume, PersistentVolumeClaim
 * and more :)
+* also called API Primitives
 
 ### Pods:
 * Runs a single set of containers

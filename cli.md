@@ -44,12 +44,18 @@ kubectl delete <item> <item name>
 
 * `kubectl describe pod <pod name> -n <namespace> `
 * `kubectl get nodes`
-* `kubectl api-resources -o name`
+
 * `kubectl get nodes $node_name`
 * `kubectl get nodes $node_name -o yaml`
 * `kubectl describe node $node_name`
+* `kubectl create ns <namespace>`
 
 
+* list all object resources available in cluster
+    * `kubectl api-resources -o name`
+    * can enumerate cluster capabilities
+    * i.e. pods, services, etc. 
+    
 * service
     * `kubectl get endpoints <service name`
         * this is the connection info from service to pods

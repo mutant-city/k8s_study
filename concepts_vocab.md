@@ -25,6 +25,7 @@ Commands:
     * desired state of that object
 * status
     * the current state of the object
+* can see spec and status via `kubectl describe` commands
 
 ### Vocab
 * Node: The actual server hardware that a k8's daemon is running on
@@ -152,6 +153,16 @@ kubectl get --raw /apis/metrics.k8s.io/
                   emptyDir: {}
         ```
 
+* Two ways PVs may be provisioned: statically or dynamically
+    * static: via statically provisioned PV/PVC
+    * dynamic: via StorageClasses
+    
+* AccessModes
+    * ReadWriteOnce -- the volume can be mounted as read-write by a single node
+    * ReadOnlyMany -- the volume can be mounted read-only by many nodes
+    * ReadWriteMany -- the volume can be mounted as read-write by many nodes
+
+
 * Steps
     1. create PV `kubectl apply`
         * `kubectl get pv <pv name>`
@@ -174,7 +185,7 @@ kubectl get --raw /apis/metrics.k8s.io/
                 Google Compute Engine persistent disk, an NFS share, or an Amazon Elastic Block Store volume.
     * `kubectl get pv <pv name>`
         * can see if status is Available
-       
+    * https://kubernetes.io/docs/concepts/storage/persistent-volumes/
                 
 * PersistentVolumeClaim
     * PVC is Abstraction between the user(Pod) and the PersistentVolume
@@ -191,3 +202,21 @@ kubectl get --raw /apis/metrics.k8s.io/
         * spec.volumes.persistentVolumeClaim
         * instead of volume version: .spec.volumes.emptyDir
         * note: the pod doesn't know about the PV just the PVC
+
+* Retention
+    * The reclaim policy for a PersistentVolume tells the cluster what to do with the volume after it has been released of its claim
+    * Currently, volumes can either be Retained, Recycled, or Deleted.
+    * Reclaim: 
+        * When the PersistentVolumeClaim is deleted, the PersistentVolume still exists and the volume is considered "released". 
+        * But it is not yet available for another claim because the previous claimant's data remains on the volume. 
+        * admin must manually follow steps to reclaim
+    * Delete:
+        * deletion removes both the PersistentVolume object from Kubernetes, as well as the associated storage asset in the external infrastructure, 
+          such as an AWS EBS, GCE PD, Azure Disk, or Cinder volume.
+    * Recycle:
+        * If supported by the underlying volume plugin, the Recycle reclaim policy performs a basic scrub (rm -rf /thevolume/*) on the volume and makes it available again for a new claim.
+
+
+
+* StorageClass
+    Volumes that were dynamically provisioned inherit the reclaim policy of their StorageClass, which defaults to Delete

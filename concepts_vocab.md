@@ -10,6 +10,7 @@
         * without the namespace specified k8's will act like the object doesn't exist
 * can add a namespace in the `metadata` section in the spec.yaml file
     * see `my-pod-namespace.yaml`
+    * .metadata.namespace
 * uses: 
     * organizing appplications running the same cluster
     * multiple teams 
@@ -31,6 +32,7 @@ Commands:
 * Node: The actual server hardware that a k8's daemon is running on
 * Pod: A collection of containers that serve a purpose that run on a Node
 * Container: the actual singlar unit of work/container that is running
+* ton more objects
 
 ### Networking
 * Each Pod is assigned a unique IP address for each address family. 
@@ -66,6 +68,12 @@ Commands:
 * cli flag = --show-labels
 * or there's a labels section in describe
 * useable by selectors via other objects or CLI to identify objects
+
+### RestartPolicy
+* .spec.restartPolicy
+* restartPolicy field with possible values Always, OnFailure, and Never. 
+* The default value is Always.
+* The restartPolicy applies to all containers in the Pod.
 
 ### Annotations
 * used to store custom metadata about objects

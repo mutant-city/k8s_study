@@ -14,6 +14,8 @@ kubectl edit <item> <item name>
 
 kubectl delete <item> <item name>  
 ```
+* be sure when typing these to use the correct namespace or will get error even if object exists
+
 * Where item=
     * deployments
     * pods

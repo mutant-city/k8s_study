@@ -67,7 +67,10 @@ kubectl delete <item> <item name>
 
 * Run a command in a Container
     * `kubectl exec <pod name> -- curl <secure pod cluster ip address>`
-
+    
+* get a shell to a container
+    * `kubectl exec -it task-pv-pod -- /bin/bash`
+    
 * To inspect a nodes resources:
     * `kubectl describe node node-name | grep Allocatable -B 7 -A 6`
     * note: this just filters the large output of describe

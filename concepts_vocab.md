@@ -100,14 +100,32 @@ kubectl get --raw /apis/metrics.k8s.io/
 * State persistence: maintaining data outside and potentially beyond the lifecycle of a container
 * PersistentVolume and PersistentVolume claims provide easy way to implement/consume storage resources in the context 
     of complex production environment that has numerous storage solutions
-    * 
+    * can abstract out s3, google cloud, EBS, etc. with a PersistenVolume object
+    
+* a Node represents CPU and Memory resources while a PV represents Storage resources
+
+* PersistentVolume represents a storage resource
+
+
+* StorageClass: 
+    * defines categories of storage
+    * ex: fast, slow
+    
+* accessModes:
+    * determine what read/write modes can access the volume
+    * how many pods/read, write/etc.
+    * ex: ReadWriteOnce
+    
+        
+* storageSystem<-->PersistentVolume<-->PersistentVolumeClaim<-->Pod
+
 * Volume
     * Volumes exists outside the lifetime of the container and aren't ephemeral
     * mounts volumes to specific container
     * setup inside of the pod spec-> .spec.volumes
     * assigned to container/s via -> .spec.containers.volumeMounts[]
     * types of volume:
-        * emptyDir volume
+        * .spec.volumes.emptyDir volume
             * can add an emptyDir to numerous containers who all now share volume
             * in below spec file the two containers share the my-volume storage at /tmp/storage
         * ```
@@ -117,22 +135,59 @@ kubectl get --raw /apis/metrics.k8s.io/
               name: volume-pod
             spec:
               containers:
-              - image: busybox
-                name: busybox
-                command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
-                volumeMounts:
-                - mountPath: /tmp/storage
-                  name: my-volume         
-              - image: busybox
-                name: busybox
-                command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
-                volumeMounts:
-                - mountPath: /tmp/storage
-                  name: my-volume
-            volumes:
+                  - image: busybox
+                    name: busybox
+                    command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
+                    volumeMounts:
+                    - mountPath: /tmp/storage
+                      name: my-volume         
+                  - image: busybox
+                    name: busybox
+                    command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
+                    volumeMounts:
+                    - mountPath: /tmp/storage
+                      name: my-volume
+              volumes:
                 - name: my-volume
                   emptyDir: {}
         ```
-          
-       
+
+* Steps
+    1. create PV `kubectl apply`
+        * `kubectl get pv <pv name>`
+            * look for status of available
+    2. create PVC `kubectl apply`
+        * `kubectl get pvc`
+        * `kubectl get pv`
+            * look for status of bound on both
+    3. Add the PVC to the Pod
+    
+    
 * PersistentVolume
+    * this sets up the storage ON THE STORAGE SIDE
+    * location of the storage on the storage provider or local host
+    * types:
+        * hostPath PersistentVolume. 
+            * Kubernetes supports hostPath for development and testing on a single-node cluster.
+            * In a production cluster, you would not use hostPath. 
+                Instead a cluster administrator would provision a network resource like a 
+                Google Compute Engine persistent disk, an NFS share, or an Amazon Elastic Block Store volume.
+    * `kubectl get pv <pv name>`
+        * can see if status is Available
+       
+                
+* PersistentVolumeClaim
+    * PVC is Abstraction between the user(Pod) and the PersistentVolume
+    * bind PVC to PV
+        * PVC's automatically bind to a PV that has compatible:
+            * StorageClassName
+            * accessModes
+            * enough space to provide the requested amount
+        * Can bind to PV before bind to Pod
+            * `kubectl get pv`
+            * can check if bound to PV
+            
+    * bind to pod
+        * spec.volumes.persistentVolumeClaim
+        * instead of volume version: .spec.volumes.emptyDir
+        * note: the pod doesn't know about the PV just the PVC

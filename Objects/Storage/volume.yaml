@@ -4,18 +4,18 @@ metadata:
   name: volume-pod
 spec:
   containers:
-  - image: busybox
-    name: busybox
-    command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
-    volumeMounts:
-    - mountPath: /tmp/storage
-      name: my-volume
-  - image: busybox
-    name: busybox
-    command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
-    volumeMounts:
-    - mountPath: /tmp/storage
-      name: my-volume
-volumes:
-- name: my-volume
-  emptyDir: {}
+    - image: busybox
+      name: busybox
+      command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
+      volumeMounts:
+      - mountPath: /tmp/storage
+        name: my-volume
+    - image: busybox
+      name: busybox
+      command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
+      volumeMounts:
+      - mountPath: /tmp/storage
+        name: my-volume
+  volumes:
+    - name: my-volume
+      emptyDir: {}

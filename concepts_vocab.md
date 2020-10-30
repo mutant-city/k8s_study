@@ -1,8 +1,8 @@
-### Kubernetes meaning
+##### Kubernetes meaning
 * Kubernetes (“koo-burr-NET-eez”) is the no-doubt-mangled conventional pronunciation of a Greek word, κυβερνήτης, meaning “helmsman” or “pilot.” 
 * https://www.geekwire.com/2016/ever-come-kooky-kubernetes-name-heptio/
 
-### namespaces
+##### Namespaces
 * without a namespace, 
     * the object will be in the default namespace
     * with a namespace, will not see the object in the basic `kubectl get pods`!!!
@@ -20,7 +20,7 @@ Commands:
     specify a namespace in a get:
     * kubectl get pods -n my-ns
  
-### State management
+####### State management in K8's
 * k8s tries to make the status match the deployment spec
 * spec 
     * desired state of that object
@@ -28,18 +28,18 @@ Commands:
     * the current state of the object
 * can see spec and status via `kubectl describe` commands
 
-### Vocab
+####### Vocab
 * Node: The actual server hardware that a k8's daemon is running on
 * Pod: A collection of containers that serve a purpose that run on a Node
 * Container: the actual singlar unit of work/container that is running
 * ton more objects
 
-### Networking
+####### Networking
 * Each Pod is assigned a unique IP address for each address family. 
 * Every container in a Pod shares the network namespace, including the IP address and network ports. 
 * Inside a Pod (and only then), the containers that belong to the Pod can communicate with one another using localhost.
 
-### SecurityContext
+####### SecurityContext
 * pods run all containers as root by default
 * security groups effectively change the user/group of the running the pod 
 * can set the pod as a user and group without root access
@@ -50,7 +50,7 @@ Commands:
         * the pod won't have access
 * Note: Pod status will be `Error` if have issues with permissions of any mounted files
 
-### Resource Requirements
+####### Resource Requirements
 * k8's allows us to specify the resource requirements of a container in the pod spec
 * memory/cpu 
 * defined in terms of:
@@ -70,44 +70,129 @@ Commands:
     * so 250m is 1 quarter of a cpu core.
 * doing a describe on a container will also show this.
 * can see the limits/requests via `kubectl describe`
+* CPU consumption specificed in CPU millicores or cores: 500m is 500 millicores.
+* Memory can be Mi, Gi
 
-
-### Labels
+##### Labels
 * under the metadata parent node: .metadata.labels
 * cli flag = --show-labels
 * or there's a labels section in describe
 * useable by selectors via other objects or CLI to identify objects
 
-### RestartPolicy
+##### RestartPolicy
 * .spec.restartPolicy
 * restartPolicy field with possible values Always, OnFailure, and Never. 
 * The default value is Always.
 * The restartPolicy applies to all containers in the Pod.
 
-### Annotations
+##### Annotations
 * used to store custom metadata about objects
 * not intended to be identifying and not usable by selection
 * just attach some kind of custom data 
 
-### Selectors
+##### Selectors
 * provide us a way to select a list of objects based on their lable
 * used by objects to grab other objects and apply functionality
 * used by cli to obtain objects
 * in objects .spec.selector.matchLabels
 
-### Service account:
+##### Service account:
 * service accounts allows the pod to access the kubernetes API
 * some pods need acces to k8's cluster
 * .spec.serviceAccountName: <account name>
+* `kubectl create serviceaccount <some service account name>`
+    * creates a service account
 * on CKAD don't need to know how to configure service accounts inside of the k8's cluster
 
-### Monitoring
+##### Monitoring
 * One of many kubernetes Monitoring apps
 ```
 git clone https://github.com/linuxacademy/metrics-server
 kubectl apply -f ~/metrics-server/deploy/1.8+/
 kubectl get --raw /apis/metrics.k8s.io/
 ```
+
+### Multi Container Pods
+* Pods with more than one container that all work together as a single unit
+* Mostly have containers separate in their own pods but certain cases it's good to have multi-container pods
+* .spec.containers[] accepts multiple container definition
+* multi-container pod design patterns: 
+    * sidecar 
+        * has main container and side car container
+        * side car container enhance the functionality of the main container in some way
+        * ex: a side car that syncs files from github to a webserver every two minutes
+        * cron job containers are a good example of this
+        
+    * ambassador
+        * i.e. a web server
+        * capturing and translating network traffic
+        * network traffic goes to ambassador first then to the main container
+        * ambassador listens on a custom port then forwards traffic to a legacy application container hardcoded on a different port
+    
+    * adapter
+        * i.e. a proxy server that 
+        * changing the output from the main container
+        * data/traffic leaves the main container and goes to the adapter first which transforms the output from the main container
+        
+        
+* containers in same pod interact with one another via:
+    * shared network
+        * it's as if the containers were all on the same host
+        * can use localhost to access other containers i.e. localhost:1234
+        * note: containers in same pod can communicate with each other by default
+            * no need to expose it or anything.
+        * share a port range i.e. only one container may bind a single port
+    * shared storage volumes
+        * can mount the same volume to two different containers
+        * one container outputting to volume and other reading or vice versa
+    * Shared Process Namespace
+        * allows the two containers to signal each other's processes
+        * to enable have to add a flag to pod spec:
+            *shareProcessNamespace: true
+            
+### Probes
+* Customize how ubernetes determines the status of your container
+
+* Liveness Probe
+    * indicates whether container is running properly
+    * governs when cluster automatically starts/stops container
+    * .spec.containers[].livenessProbe:
+        * exec.command
+            * runs a command in the container
+        * initialDelaySeconds: 5
+            * waits X number of seconds before running the command specificed in .exec.command
+            * incase you need to delay the inital start of the liveness probe
+        * periodSeconds: 5
+            * runs the probe every five seconds
+    
+* Readiness Probe
+    * detects whether pod is ready to recieve requests
+    * i.e. if the container takes some time to start up 
+    * .spec.containers[].readinessProbe:
+        * httpGet:
+            * makes an http request to the pod on port 80 at path of /
+            * path: /
+            * port: 80
+        * initialDelaySeconds
+        * periodSeconds
+           
+* Some common ways for Probes to detect the container status:
+    * run a command  
+    * send an http request
+  
+### Pod logging
+* `kubectl logs`
+* containers normal console output goes into something in K8's called the container log
+    * i.e. echo
+* Can save to a file via normal linux redirect > 
+
+
+### Pod Monitoring
+
+* `kubectl top pods`
+* `kubectl top nodes`
+* `kubectl top <pod name>`
+* returns CPI and memory
 
 ### Storage
 * containers internal storage ephemeral by default
@@ -239,3 +324,5 @@ kubectl get --raw /apis/metrics.k8s.io/
 
 * StorageClass
     Volumes that were dynamically provisioned inherit the reclaim policy of their StorageClass, which defaults to Delete
+    
+    

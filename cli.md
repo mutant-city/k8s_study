@@ -114,6 +114,11 @@ kubectl delete <item> <item name>
 * view logs
     * `kubectl logs <podname>`
     
+* Get the yaml spec from the running in memory k8s cluster
+    * `kubectl get pod <pod> -n <namespace> -o yaml --export`
+    * only gets the actual yaml defined spec of the pod, ignores the status and other metadata   
+    
+    
 ### Running objects
 * commands:
     * create
@@ -136,24 +141,34 @@ kubectl delete <item> <item name>
         * gets detailed information about specific object   
         
 ### Troubleshooting/Debugging
-* `kubectl get X` 
-    * see the status field in the `get` command statements
+* `kubectl get` all pods
+* look for status fields for hints
+* drill down with a `kubectl describe` on the broken object
+    * look into events section!!
 * `kubectl logs`
+
+### Fixing pods
+
+* can use `kubectl edit`
+    * can directly edit the definition itself
+    * when save the file, will automatically/edit & update the pod 
+    * note: can't edit certain fields once a pod is running
+        * for example: liveness probes
+        * have to delete and recreate the pod
+        * see next section
+            
+* For non-fixable while running live objects:
+    1. export the spec as yaml file, 
+    2. delete the pod, 
+    3. then fix the spec, 
+    4 . then recreate the object
+        
 * Removing a pod from the scope of the ReplicationController comes in handy
 when you want to perform actions on a specific pod. For example, you might 
 have a bug that causes your pod to start behaving badly after a specific amount 
 of time or a specific event.
 
-### Fixing pods by editing the in memory cluster k8's spec
-* kubectl edit
-* can directly edit the definition itself
-* when save the file, will automatically/edit & update the pod 
-* note: can't edit certain fields once a pod is running
-    * for example: liveness probes
-    * have to delete and recreate the pod
-* can get the spec from the in memory k8s cluster
-    * `kubectl get pod <pod> -n <namespace> -o yaml --export`
-    * only gets the actual spec of the pod, ignores the status and other metadata
+
     
 ###  Logging
 * Everything a containerized application writes to stdout and stderr is handled and redirected somewhere by a container engine.  

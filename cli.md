@@ -74,6 +74,7 @@ kubectl delete <item> <item name>
     * `kubectl get pod <podname> -o wide`
 
 * Run a command in a Container
+    * `kubectl exec <pod name> -- <bash command here>`
     * `kubectl exec <pod name> -- curl <secure pod cluster ip address>`
     
 * get a shell to a container
@@ -110,7 +111,9 @@ kubectl delete <item> <item name>
         kubectl top pod <podname>
         kubectl top nodes
       ```
-      
+* view logs
+    * `kubectl logs <podname>`
+    
 ### Running objects
 * commands:
     * create

@@ -40,27 +40,36 @@ Commands:
 * Inside a Pod (and only then), the containers that belong to the Pod can communicate with one another using localhost.
 
 ### SecurityContext
-* defines privilege and access control settings for pods/containers for a pid
-* can give a container special operating system privileges
-* `securityContext` defined as an element in the `spec` root element 
+* pods run all containers as root by default
+* security groups effectively change the user/group of the running the pod 
+* can set the pod as a user and group without root access
+* interactions between container and node
+* defines the containers user/group running on the node
+    * if the container doesn't have the permissions then things like volume mounts will mount but the files will deny access
+    * i.e. chmod and chown a location on the node for a user that is different than the security context's defined user for the pod
+        * the pod won't have access
+* Note: Pod status will be `Error` if have issues with permissions of any mounted files
 
 ### Resource Requirements
 * k8's allows us to specify the resource requirements of a container in the pod spec
 * memory/cpu 
 * defined in terms of:
     * resource requests 
-        * the amount of resources necessary to run a container
+        * the amount of resources on the node requested/necessary to run a container
         * pod will only run on a node that has enough resources to run it
         * K8s's typically kills container if not enough resources as defined in resources are available 
         * k8s kills a container if the container passes its defined limit, i.e. uses to many resources
     * limits
-        * maximum value for the resource usage of a container
+        * maximum value for the resource usage of a container on a node
+        * if goes above limit, container will be killed 
 * specified under the `container` root key 
+    * .spec.containers[].resources
 * notation is here
     * https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#meaning-of-memory
 * cpu limits are percentage of a cpu core. 1000 millicpus = 1 cpu core. 
     * so 250m is 1 quarter of a cpu core.
 * doing a describe on a container will also show this.
+* can see the limits/requests via `kubectl describe`
 
 
 ### Labels
@@ -87,8 +96,10 @@ Commands:
 * in objects .spec.selector.matchLabels
 
 ### Service account:
-* can allow certain service accounts to use a certain pod
 * service accounts allows the pod to access the kubernetes API
+* some pods need acces to k8's cluster
+* .spec.serviceAccountName: <account name>
+* on CKAD don't need to know how to configure service accounts inside of the k8's cluster
 
 ### Monitoring
 * One of many kubernetes Monitoring apps

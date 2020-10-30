@@ -325,4 +325,48 @@ kubectl get --raw /apis/metrics.k8s.io/
 * StorageClass
     Volumes that were dynamically provisioned inherit the reclaim policy of their StorageClass, which defaults to Delete
     
+### Troubleshooting/Debugging
+* `kubectl get` all pods
+* look for status fields for hints
+* drill down with a `kubectl describe` on the broken object
+    * look into events section!!
+* `kubectl logs`
+
+### Fixing pods
+
+* can use `kubectl edit`
+    * can directly edit the definition itself
+    * when save the file, will automatically/edit & update the pod 
+    * note: can't edit certain fields once a pod is running
+        * for example: liveness probes
+        * have to delete and recreate the pod
+        * see next section
+            
+* For non-fixable while running live objects:
+    1. export the spec as yaml file, 
+    2. delete the pod, 
+    3. then fix the spec, 
+    4 . then recreate the object
+        
+* Removing a pod from the scope of the ReplicationController comes in handy
+when you want to perform actions on a specific pod. For example, you might 
+have a bug that causes your pod to start behaving badly after a specific amount 
+of time or a specific event.
+
+
     
+###  Logging
+* Everything a containerized application writes to stdout and stderr is handled and redirected somewhere by a container engine.  
+* ensure log rotation on the node so that space doesn't fill up 
+* ```
+    kubectl logs <pod name> # pod logs
+    kubectl logs <pod name> -c <container name> # specific container logs
+    ```
+* For crashed containers
+    * `kubectl logs --previous <pod name> -c <container name>`
+* Exceptions:
+    * The kubelet and container runtime, for example Docker, do not run in containers, the run on the node and log to the node.
+        * On machines with systemd, the kubelet and container runtime write to journald. If systemd is not present, they write to .log files in the /var/log directory. System components inside containers always write to the /var/log directory, bypassing the default logging mechanism.
+        * logrotate node logs as well
+* https://kubernetes.io/docs/concepts/cluster-administration/logging/
+

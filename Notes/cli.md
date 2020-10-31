@@ -131,6 +131,7 @@ kubectl delete <item> <item name>
 
 * get external service connectivity
     * `kubectl get svc`
+    
 * get internal service connectivity
     *this is the connection info from service to pods 
     * `kubectl get endpoints <service name>`
@@ -158,3 +159,11 @@ kubectl delete <item> <item name>
     * describe
         * gets detailed information about specific object   
         
+### Rollout new deployments
+* `kubectl rollout history deployment/rolling-deployment`
+* `kubectl rollout history deployment/rolling-deployment --revision=2`
+* `kubectl rollout undo deployment/rolling-deployment`
+* `kubectl rollout undo deployment/rolling-deployment --to-revision=1`
+
+`
+`

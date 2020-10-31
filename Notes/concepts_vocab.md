@@ -205,6 +205,7 @@ kubectl get --raw /apis/metrics.k8s.io/
 * drill down with a `kubectl describe` on the broken object
     * look into events section!!
 * `kubectl logs`
+* services can do a `get/describe` and `get endpoints` to trace network connectivity(see cli section)
 
 ### Fixing pods
 * can use `kubectl edit`
@@ -242,3 +243,4 @@ of time or a specific event.
         * logrotate node logs as well
 * https://kubernetes.io/docs/concepts/cluster-administration/logging/
 
+### Rolling Update/Deployment

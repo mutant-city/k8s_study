@@ -33,7 +33,11 @@
     * also done via .yaml spec file
   
 ### Updating Deployment/Rolling updates/rollback
-* when update number of replicas, Deployment object sends that down to the replica set
+* gradually update a deployment to a new container via updating certain pods at a time
+* can quickly return to a previous state for recovery, if issues
+
+* when update number of replicas, Deployment object sends that down to the replica set and more or less are done with no rollback
+
 * when update the actual spec, i.e. change containers or parameters or something
     * Deployment creates a new replica set with size zero 
     * then  Then, the size of that replica set is progressively increased, while decreasing the size of the other replica set.
@@ -47,10 +51,12 @@
     * If there is no readiness probe, then the container is considered as ready, as long as it could be started. So make sure that you define a readiness probe if you want to leverage that feature!
 * Rolling between replica sets
     * see: https://semaphoreci.com/blog/kubernetes-deployment
-* MaxUnavailable: Setting MaxUnavailable to 0 means, “do not shutdown any old pod before a new one is up and ready to serve traffic“.
-* MaxSurge: Setting MaxSurge to 100% means, “immediately start all the new pods“, implying that we have enough spare capacity on our cluster, and that we want to go as fast as possible.
+* MaxUnavailable
+    * Setting MaxUnavailable to 0 means, “do not shutdown any old pod before a new one is up and ready to serve traffic“.
+* MaxSurge 
+    * Setting MaxSurge to 100% means, “immediately start all the new pods“, implying that we have enough spare capacity on our cluster, and that we want to go as fast as possible.
 * The default values for both parameters(MaxSurge and MaxUnavailable) are 25%, meaning that when updating a deployment of size 100, 25 new pods are immediately created, while 25 old pods are shutdown
-*  When we edit the deployment and trigger a rolling update, a new replica set is created. This replica set will create pods, whose labels will include (among others) run=web. As such, these pods will receive connections automatically.
+*  When we edit the deployment and trigger a rolling update, a new replica set is created with same labels. This replica set will create pods, whose labels will include (among others) run=web. As such, these pods will receive connections automatically.
 *  This means that during a rollout, the deployment doesn’t reconfigure or inform the load balancer that pods are started and stopped. It happens automatically through the selector of the service associated to the load balancer.
 
 * Deployment creates ReplicaSet creates Pods
@@ -65,3 +71,12 @@
     * https://semaphoreci.com/blog/kubernetes-deployment
     * https://thenewstack.io/kubernetes-deployments-work/
 
+### Rollout new deployments CLI
+* `kubectl set image <deployment name> <container name>=<image name> --record`
+    * record flag records information about the deployment
+* `kubectl rollout history deployment/rolling-deployment`
+* `kubectl rollout history deployment/rolling-deployment --revision=2`
+* `kubectl rollout undo deployment/rolling-deployment`
+* `kubectl rollout undo deployment/rolling-deployment --to-revision=1`
+
+`

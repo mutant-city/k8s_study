@@ -1,5 +1,6 @@
 ### Config Map
 * k/v store of configuration data that you need to pass into pods/containers
+
 * can pass in two ways
     1. Set as environment vars in the containers of a pod
         * via env section of spec file
@@ -15,4 +16,16 @@
               name: my-config-map
               key: myKey
         ```        
-            
+
+* can specify an entire FILE as a config map
+    * If the following is mounted as a volume, there will be a file named candy.cfg at the mount point.
+    ```
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: candy-service-config
+    data:
+      candy.cfg: |-
+        candy.peppermint.power=100000000
+        candy.nougat-armor.strength=10
+    ```

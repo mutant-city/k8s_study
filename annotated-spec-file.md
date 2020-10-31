@@ -47,5 +47,6 @@ spec:
         memory: "128Mi"
         cpu: "500m"
 
-
-  restartPolicy: Never # ?? research more
+  backOffLimit: 4  # how many times the job will attempt to run if it fails(apply only to jobs?)
+  restartPolicy: OnFailure # automatically restarted if it fails but if completes then won't be restarted
+  restartPolicy: Never  # will never be restarted

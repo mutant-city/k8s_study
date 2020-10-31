@@ -35,6 +35,7 @@ kubectl delete <item> <item name>
 * useful flags
     * --all-namespaces
     * -n <namespace>
+        * can enter into namespaces
     * -o 
         * wide - get wider output for pods: a Pod IP addy, Node, and more.
         * yaml - get yaml of the object
@@ -43,6 +44,18 @@ kubectl delete <item> <item name>
     * --show-labels
     * -l
         * can filter via labels with this, see below
+        * note this is a filter language, see below
+
+* using labels/selectors: -l
+    * --show-labels
+    * describe has labels section as well
+    * -l flag
+        * `kubectl get <x> -l <label key value pair>`
+        * `kubectl get pods -l app=my-app`
+        * `kubectl get pods -l app!=my-app`
+        * Select numerous values per label(set based): `kubectl get pods -l 'environment in (development,production)`        
+        * Select numerous keys and values for labels(k/v or set based): `kubectl get pods -l app=my-app,environment=production`
+
 
 * `kubectl describe pod <pod name> -n <namespace> `
 * `kubectl get nodes`
@@ -88,15 +101,6 @@ kubectl delete <item> <item name>
     * `kubectl get <x> -o yaml`
     * `kubectl describe <x>`
     
-* using labels/selectors
-    * --show-labels
-    * describe has labels section as well
-    * -l flag
-        * `kubectl get <x> -l <label key value pair>`
-        * `kubectl get pods -l app=my-app`
-        * `kubectl get pods -l app!=my-app`
-        * Select numerous values per label(set based): `kubectl get pods -l 'environment in (development,production)`        
-        * Select numerous keys and values for labels(k/v or set based): `kubectl get pods -l app=my-app,environment=production`
 
 * edit running objcts
     * can in place edit running objects
@@ -118,7 +122,21 @@ kubectl delete <item> <item name>
     * `kubectl get pod <pod> -n <namespace> -o yaml --export`
     * only gets the actual yaml defined spec of the pod, ignores the status and other metadata   
     
-    
+* `kubectl set image <>` change a deployment
+    * -r  or --record flag
+    * will store the changes so that can rollback if needed
+
+*  can create deployment via cli: `kubectl expose deployment web --port=80`
+    * also done via .yaml spec file
+
+* get external service connectivity
+    * `kubectl get svc`
+* get internal service connectivity
+    *this is the connection info from service to pods 
+    * `kubectl get endpoints <service name>`
+     * can use it to make sure connectivity is working
+     
+     
 ### Running objects
 * commands:
     * create

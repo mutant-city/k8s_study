@@ -1,8 +1,8 @@
-##### Kubernetes meaning
+#### Kubernetes meaning
 * Kubernetes (“koo-burr-NET-eez”) is the no-doubt-mangled conventional pronunciation of a Greek word, κυβερνήτης, meaning “helmsman” or “pilot.” 
 * https://www.geekwire.com/2016/ever-come-kooky-kubernetes-name-heptio/
 
-##### Namespaces
+#### Namespaces
 * without a namespace, 
     * the object will be in the default namespace
     * with a namespace, will not see the object in the basic `kubectl get pods`!!!
@@ -20,7 +20,7 @@ Commands:
     specify a namespace in a get:
     * kubectl get pods -n my-ns
  
-####### State management in K8's
+#### State management in K8's
 * k8s tries to make the status match the deployment spec
 * spec 
     * desired state of that object
@@ -28,18 +28,18 @@ Commands:
     * the current state of the object
 * can see spec and status via `kubectl describe` commands
 
-####### Vocab
+### Vocab
 * Node: The actual server hardware that a k8's daemon is running on
 * Pod: A collection of containers that serve a purpose that run on a Node
 * Container: the actual singlar unit of work/container that is running
 * ton more objects
 
-####### Networking
+### Networking
 * Each Pod is assigned a unique IP address for each address family. 
 * Every container in a Pod shares the network namespace, including the IP address and network ports. 
 * Inside a Pod (and only then), the containers that belong to the Pod can communicate with one another using localhost.
 
-####### SecurityContext
+### SecurityContext
 * pods run all containers as root by default
 * security groups effectively change the user/group of the running the pod 
 * can set the pod as a user and group without root access
@@ -50,7 +50,7 @@ Commands:
         * the pod won't have access
 * Note: Pod status will be `Error` if have issues with permissions of any mounted files
 
-####### Resource Requirements
+### Resource Requirements
 * k8's allows us to specify the resource requirements of a container in the pod spec
 * memory/cpu 
 * defined in terms of:
@@ -73,30 +73,34 @@ Commands:
 * CPU consumption specificed in CPU millicores or cores: 500m is 500 millicores.
 * Memory can be Mi, Gi
 
-##### Labels
-* under the metadata parent node: .metadata.labels
-* cli flag = --show-labels
-* or there's a labels section in describe
-* useable by selectors via other objects or CLI to identify objects
+### Labels/Selectors
+* Labels
+    * under the metadata parent node: .metadata.labels
+    * useable by selectors via other objects or CLI to identify objects
+    * cli flag = --show-labels
+    * or there's a labels section in describe
+* Selectors
+    * provide us a way to select a list of objects based on their labels
+    * used by objects to grab other objects and apply functionality
+    * used by cli to obtain objects
+    * in objects .spec.selector.matchLabels
+    
+### Annotations
+* used to store custom metadata about objects
+* not intended to be identifying and not usable by selection
+* just attach some kind of custom data that you want to record abou the object
+* functionless from a k8's perspective
+* can view with a `describe`
 
-##### RestartPolicy
+
+#### RestartPolicy
 * .spec.restartPolicy
 * restartPolicy field with possible values Always, OnFailure, and Never. 
 * The default value is Always.
 * The restartPolicy applies to all containers in the Pod.
 
-##### Annotations
-* used to store custom metadata about objects
-* not intended to be identifying and not usable by selection
-* just attach some kind of custom data 
 
-##### Selectors
-* provide us a way to select a list of objects based on their lable
-* used by objects to grab other objects and apply functionality
-* used by cli to obtain objects
-* in objects .spec.selector.matchLabels
-
-##### Service account:
+#### Service account:
 * service accounts allows the pod to access the kubernetes API
 * some pods need acces to k8's cluster
 * .spec.serviceAccountName: <account name>
@@ -104,7 +108,7 @@ Commands:
     * creates a service account
 * on CKAD don't need to know how to configure service accounts inside of the k8's cluster
 
-##### Monitoring
+#### Monitoring
 * One of many kubernetes Monitoring apps
 ```
 git clone https://github.com/linuxacademy/metrics-server

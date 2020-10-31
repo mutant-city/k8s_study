@@ -242,5 +242,3 @@ of time or a specific event.
         * On machines with systemd, the kubelet and container runtime write to journald. If systemd is not present, they write to .log files in the /var/log directory. System components inside containers always write to the /var/log directory, bypassing the default logging mechanism.
         * logrotate node logs as well
 * https://kubernetes.io/docs/concepts/cluster-administration/logging/
-
-### Rolling Update/Deployment

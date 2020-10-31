@@ -12,5 +12,4 @@
     * `kubectl get cronjobs`
             * LAST SCHEDULE is the last time it ran, other fields are self explanatory
     * will allow you to see the scheduling info for the cronjob
- 
-    
+* .spec.backOffLimit: how many times the job will attempt to run if it fails

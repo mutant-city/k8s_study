@@ -108,13 +108,6 @@ Commands:
     * creates a service account
 * on CKAD don't need to know how to configure service accounts inside of the k8's cluster
 
-#### Monitoring
-* One of many kubernetes Monitoring apps
-```
-git clone https://github.com/linuxacademy/metrics-server
-kubectl apply -f ~/metrics-server/deploy/1.8+/
-kubectl get --raw /apis/metrics.k8s.io/
-```
 
 ### Multi Container Pods
 * Pods with more than one container that all work together as a single unit
@@ -155,7 +148,7 @@ kubectl get --raw /apis/metrics.k8s.io/
             *shareProcessNamespace: true
             
 ### Probes
-* Customize how ubernetes determines the status of your container
+* Customize how kubernetes determines the status of your container
 
 * Liveness Probe
     * indicates whether container is running properly
@@ -184,61 +177,9 @@ kubectl get --raw /apis/metrics.k8s.io/
     * run a command  
     * send an http request
   
-### Pod logging
-* `kubectl logs`
-* containers normal console output goes into something in K8's called the container log
-    * i.e. echo
-* Can save to a file via normal linux redirect > 
 
 
-### Pod Monitoring
-
-* `kubectl top pods`
-* `kubectl top nodes`
-* `kubectl top <pod name>`
-* returns CPI and memory
 
 
-### Troubleshooting/Debugging
-* `kubectl get` all pods
-* look for status fields for hints
-* drill down with a `kubectl describe` on the broken object
-    * look into events section!!
-* `kubectl logs`
-* services can do a `get/describe` and `get endpoints` to trace network connectivity(see cli section)
-
-### Fixing pods
-* can use `kubectl edit`
-    * can directly edit the definition itself
-    * when save the file, will automatically/edit & update the pod 
-    * note: can't edit certain fields once a pod is running
-        * for example: liveness probes
-        * have to delete and recreate the pod
-        * see next section
-            
-* For non-fixable while running live objects:
-    1. export the spec as yaml file, 
-    2. delete the pod, 
-    3. then fix the spec, 
-    4 . then recreate the object
-        
-* Removing a pod from the scope of the ReplicationController comes in handy
-when you want to perform actions on a specific pod. For example, you might 
-have a bug that causes your pod to start behaving badly after a specific amount 
-of time or a specific event.
 
 
-###  Logging
-* Everything a containerized application writes to stdout and stderr is handled and redirected somewhere by a container engine.  
-* ensure log rotation on the node so that space doesn't fill up 
-* ```
-    kubectl logs <pod name> # pod logs
-    kubectl logs <pod name> -c <container name> # specific container logs
-    ```
-* For crashed containers
-    * `kubectl logs --previous <pod name> -c <container name>`
-* Exceptions:
-    * The kubelet and container runtime, for example Docker, do not run in containers, the run on the node and log to the node.
-        * On machines with systemd, the kubelet and container runtime write to journald. If systemd is not present, they write to .log files in the /var/log directory. System components inside containers always write to the /var/log directory, bypassing the default logging mechanism.
-        * logrotate node logs as well
-* https://kubernetes.io/docs/concepts/cluster-administration/logging/

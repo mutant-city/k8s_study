@@ -1,5 +1,9 @@
 ### Enumeration
 
+### Daddy enumeration
+* `kubectl get all -A`
+    * this gets everything in every namespace
+    * if this is too big, can drill down more precisely with the following commands
 
 ### Cluster enumeration and CLI:
 *  
@@ -11,8 +15,6 @@ kubectl edit <item> <item name>
 kubectl delete <item> <item name>  
 ```
 
-
-
 * EX:
 * `kubectl describe pod <pod name> -n <namespace> `
 * `kubectl get nodes`
@@ -23,6 +25,9 @@ kubectl delete <item> <item name>
 
 * view logs
     * `kubectl logs <podname>`
+
+### Get yaml from existing objects
+* `kubectl get deployments ghost --export -n ghost -o yaml > objectfile.yaml`
 
 
 ### Gotchas 

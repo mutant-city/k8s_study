@@ -30,16 +30,44 @@
     * Partial updates using diffs create complex merge and patch operations.
 
 
-
-        
-
+### Running/Viewing objects
+* commands:
+    * create
+    * start,stop,delete
+    * edit
+        * opens up in a text editor to edit the object spec
+    * apply 
+        * via file: -f <filename>
+        * updates the object from the spec
+    * view logs
+        * `kubectl logs <podname>`
+    * execute command inside a pod
+        * exec command with -- and a space
+        * `kubectl exec <podname> -- ls /etc/config`
+    * exec 
+        * run a command on the container
+    * get
+        * gets a big picture view of all of the objects in that class
+    * describe
+        * gets detailed information about specific object   
 
 ### Cli help
 * `kubectl explain <resource>`
     * `kubectl explain pod.spec.containers.env`
     
 
-### Increase efficiency
+
+### Exam tips
+### Increase cli efficiency
 * `alias k=kubectl`
+* configure the text editor you'll be using
 
+### If copy in from internet Paste into notepad first to get weird of odd characters
+* when copying from docs:
+* The suggestion is that always paste the texts into the notepad first, 
+* adjust any indent problems, 
+* and then move it to the YAML file in the exam console.
 
+### Speed up delete
+* Delete a pod is slow by using command kubectl delete pod <pod name>. It may take up to 10-20 seconds to complete
+* `kubectl delete pod my-pod --grace-period=0 --force`

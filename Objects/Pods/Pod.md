@@ -22,3 +22,4 @@
     * with this will open to other pods in cluster and if configured to the world
     * .spec.containers[].ports[].containerPort
 
+* 

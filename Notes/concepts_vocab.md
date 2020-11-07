@@ -180,6 +180,40 @@ Commands:
 
 
 
+### Command is NOT executed within a shell
+* WRONG: 
+```
+  containers:
+    - name: busybox
+      image: busybox
+      command: ["while true; do date; sleep 1;done"]
+
+```
+* CORRECT:
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tip1-pod
+spec:
+  containers:
+    - name: busybox
+      image: busybox
+      commands: ["sh", "-c"]
+      args: ["while true; do date; sleep 1;done"]
+```
 
 
-
+### Set multiline value in ConfigMap
+* Use | or |-
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tip2-configmap
+data:
+  NGINX_CONFIG: |-
+    server {
+      listen 80;
+    }
+```

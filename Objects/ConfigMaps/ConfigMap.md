@@ -1,4 +1,11 @@
 ### Config Map
+
+#### CLI
+
+* create a 
+    * `kubectl create configmap test --dry-run=client  -o yaml > cm.yaml`
+
+
 * k/v store of configuration data that you need to pass into pods/containers
 
 * can pass in two ways

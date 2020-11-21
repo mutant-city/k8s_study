@@ -1,5 +1,9 @@
 ### General
 
+### Uber troubleshooting command
+
+`kubectl describe pod testdownload && k get pod testdownload -o yaml && k logs testdownload`
+
 ### Troubleshooting/Debugging
 * `kubectl get` all pods
 * look for status fields for hints

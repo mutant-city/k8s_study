@@ -5,7 +5,18 @@
 * TBD
 
 ### Volume
-* TBD
+* spec.volumes
+
+```
+- name: vol1
+  emptyDir: {}
+
+- name: config-volume
+  configMap:
+    name: my-config-map
+
+
+```
 
 
 ### Storage
@@ -28,7 +39,7 @@
 
 * StorageClass: 
     * defines categories of storage
-    * ex: fast, slow
+    * ex: fast, slow, manual
     
 * accessModes:
     * determine what read/write modes can access the volume

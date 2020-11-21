@@ -73,25 +73,6 @@ Commands:
 * CPU consumption specificed in CPU millicores or cores: 500m is 500 millicores.
 * Memory can be Mi, Gi
 
-### Labels/Selectors
-* Labels
-    * under the metadata parent node: .metadata.labels
-    * useable by selectors via other objects or CLI to identify objects
-    * cli flag = --show-labels
-    * or there's a labels section in describe
-* Selectors
-    * provide us a way to select a list of objects based on their labels
-    * used by objects to grab other objects and apply functionality
-    * used by cli to obtain objects
-    * in objects .spec.selector.matchLabels
-    
-### Annotations
-* used to store custom metadata about objects
-* not intended to be identifying and not usable by selection
-* just attach some kind of custom data that you want to record abou the object
-* functionless from a k8's perspective
-* can view with a `describe`
-
 
 #### RestartPolicy
 * .spec.restartPolicy

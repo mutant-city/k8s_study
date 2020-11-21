@@ -1,9 +1,12 @@
 ### Enumeration
 
-### Daddy enumeration
+### Deployment enumeration
 * `kubectl get all -A`
-    * this gets everything in every namespace
+    * this gets pods,services, replicasets, deployments in every namespace
+    * note will not get configmaps and other things
     * if this is too big, can drill down more precisely with the following commands
+
+
 
 ### Cluster enumeration and CLI:
 *  
@@ -26,8 +29,28 @@ kubectl delete <item> <item name>
 * view logs
     * `kubectl logs <podname>`
 
+* view IP's 
+    * `kubectl get pods -o wide`
+    * `kubectl get pod <podname> -o yaml | grep ip`
+
+
+* To get more info about things 
+    * `kubectl get <x> -o yaml`
+    * `kubectl describe <x>`
+
+* Get wider output for pods: a Pod IP addy, Node, and more.
+    * `kubectl get pods -o wide`
+    * `kubectl get pod <podname> -o wide`
+ 
+* list all object resources available in cluster
+    * `kubectl api-resources -o name`
+    * can enumerate cluster capabilities
+    * i.e. pods, services, etc.    
+    
+
+    
 ### Get yaml from existing objects
-* `kubectl get deployments ghost --export -n ghost -o yaml > objectfile.yaml`
+* `kubectl get deployments ghost -n ghost -o yaml` (can out put to file > file.yaml)
 
 
 ### Gotchas 
@@ -50,42 +73,8 @@ kubectl delete <item> <item name>
     * note: this just filters the large output of describe
 
 
-### Filtering/Increasing output
-* --all-namespaces
-* -n <namespace>
-    * can enter into namespaces
-* -o 
-    * wide - get wider output for pods: a Pod IP addy, Node, and more.
-    * yaml - get yaml of the object
-    * name - get name of the object
-    
-* --show-labels
-* -l
-    * can filter via labels with this, see below
-    * note this is a filter language, see below
-
-* using labels/selectors: -l
-    * --show-labels
-    * describe has labels section as well
-    * -l flag
-        * `kubectl get <x> -l <label key value pair>`
-        * `kubectl get pods -l app=my-app`
-        * `kubectl get pods -l app!=my-app`
-        * Select numerous values per label(set based): `kubectl get pods -l 'environment in (development,production)`        
-        * Select numerous keys and values for labels(k/v or set based): `kubectl get pods -l app=my-app,environment=production`
-
-* To get more info about things 
-    * `kubectl get <x> -o yaml`
-    * `kubectl describe <x>`
-
-* Get wider output for pods: a Pod IP addy, Node, and more.
-    * `kubectl get pods -o wide`
-    * `kubectl get pod <podname> -o wide`
- 
-* list all object resources available in cluster
-    * `kubectl api-resources -o name`
-    * can enumerate cluster capabilities
-    * i.e. pods, services, etc.    
+### Filtering/Matching
+* See `./selectors.md`
     
     
 ### Services
@@ -100,4 +89,4 @@ kubectl delete <item> <item name>
 * `kubectl get endpoints <service name`
     * this is the connection info from service to pods
     * can use it to make sure connectivity
-    
+

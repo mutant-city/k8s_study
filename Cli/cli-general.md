@@ -52,9 +52,14 @@
         * gets detailed information about specific object   
 
 ### Cli help
-* `kubectl explain <resource>`
-    * `kubectl explain pod.spec.containers.env`
+
+* `kubectl run pod --help`
+    * this explains everything needed for that command
     
+* `kubectl explain <resource>`
+    * this lets you explore the yaml SPEC
+    * `kubectl explain pod.spec.containers.env`
+    * `kubectl explain pod.spec.volumes`
 
 
 ### Exam tips

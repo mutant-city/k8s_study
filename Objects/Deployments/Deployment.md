@@ -29,9 +29,7 @@
   ```
     * `selector` does not match template `labels`
   
-*  can create deployment via cli: `kubectl expose deployment web --port=80`
-    * also done via .yaml spec file
-  
+
 ### Updating Deployment/Rolling updates/rollback
 * gradually update a deployment to a new container via updating certain pods at a time
 * can quickly return to a previous state for recovery, if issues
@@ -71,12 +69,7 @@
     * https://semaphoreci.com/blog/kubernetes-deployment
     * https://thenewstack.io/kubernetes-deployments-work/
 
-### Rollout new deployments CLI
-* `kubectl set image <deployment name> <container name>=<image name> --record`
-    * record flag records information about the deployment
-* `kubectl rollout history deployment/rolling-deployment`
-* `kubectl rollout history deployment/rolling-deployment --revision=2`
-* `kubectl rollout undo deployment/rolling-deployment`
-* `kubectl rollout undo deployment/rolling-deployment --to-revision=1`
 
-`
+
+
+  

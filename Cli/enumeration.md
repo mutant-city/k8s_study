@@ -1,12 +1,5 @@
 ### Enumeration
 
-### Deployment enumeration
-* `kubectl get all -A`
-    * this gets pods,services, replicasets, deployments in every namespace
-    * note will not get configmaps and other things
-    * if this is too big, can drill down more precisely with the following commands
-
-
 
 ### Cluster enumeration and CLI:
 *  
@@ -47,6 +40,15 @@ kubectl delete <item> <item name>
     * can enumerate cluster capabilities
     * i.e. pods, services, etc.    
     
+* persistant watch of the get statement
+    * -w flag
+    
+### Deployment enumeration
+* `kubectl get all -A`
+    * this gets pods,services, replicasets, deployments in every namespace
+    * note will not get configmaps and other things
+    * if this is too big, can drill down more precisely with the following commands
+
 
     
 ### Get yaml from existing objects

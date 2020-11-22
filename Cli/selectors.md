@@ -63,3 +63,7 @@
 
 * use -L
     * will give you a column for that label key
+
+* add labels/annotatate via CLI
+    * `kubectl label pods my-pod new-label=awesome`       
+    * `kubectl annotate pods my-pod icon-url=http://goo.gl/XXBTWq`

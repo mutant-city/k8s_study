@@ -12,7 +12,10 @@
 * `kubectl logs`
 * for services can do a `get/describe` and/or `get endpoints` to trace network connectivity(see cli section)
 * be careful of namespaces and nodes 
-
+* Get all events:
+    * `kubectl get events`
+* get single pod events
+    * `k get  events --field-selector=involvedObject.name=pod`
 ### Fixing pods
 * can use `kubectl edit`
     * can directly edit the definition itself

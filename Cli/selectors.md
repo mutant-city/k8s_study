@@ -29,6 +29,7 @@
     * used by objects to grab other objects and apply functionality
     * used by cli to obtain objects
     * in objects .spec.selector.matchLabels
+    * selectors must match ALL of the labels defined
     
 ### Annotations
 * used to store custom metadata about objects
